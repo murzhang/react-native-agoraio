@@ -1,0 +1,89 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "react-native-agoraio@^2.1.6",
+        "scope": null,
+        "escapedName": "react-native-agoraio",
+        "name": "react-native-agoraio",
+        "rawSpec": "^2.1.6",
+        "spec": ">=2.1.6 <3.0.0",
+        "type": "range"
+      },
+      "D:\\agora\\react-native-agora-demo-master"
+    ]
+  ],
+  "_cnpm_publish_time": 1521707251920,
+  "_from": "react-native-agoraio@>=2.1.6 <3.0.0",
+  "_hasShrinkwrap": false,
+  "_id": "react-native-agoraio@2.1.8",
+  "_inCache": true,
+  "_location": "/react-native-agoraio",
+  "_nodeVersion": "8.9.1",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/react-native-agoraio_2.1.8_1521707250067_0.03934746590814231"
+  },
+  "_npmUser": {
+    "name": "chn_ruby",
+    "email": "chn_ruby@126.com"
+  },
+  "_npmVersion": "5.5.1",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "react-native-agoraio@^2.1.6",
+    "scope": null,
+    "escapedName": "react-native-agoraio",
+    "name": "react-native-agoraio",
+    "rawSpec": "^2.1.6",
+    "spec": ">=2.1.6 <3.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npm.taobao.org/react-native-agoraio/download/react-native-agoraio-2.1.8.tgz",
+  "_shasum": "b70d35cad429b81fb6b106d72988dcfebcfcc33b",
+  "_shrinkwrap": null,
+  "_spec": "react-native-agoraio@^2.1.6",
+  "_where": "D:\\agora\\react-native-agora-demo-master",
+  "author": {
+    "name": "gufei"
+  },
+  "bugs": {
+    "url": "https://github.com/midas-gufei/react-native-agora/issues"
+  },
+  "dependencies": {},
+  "description": "声网Agora OpenLive",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "b70d35cad429b81fb6b106d72988dcfebcfcc33b",
+    "size": 57491857,
+    "noattachment": false,
+    "tarball": "http://registry.npm.taobao.org/react-native-agoraio/download/react-native-agoraio-2.1.8.tgz"
+  },
+  "gitHead": "e2062b40ba01d9d671feed0bcd1fcfb1bfeccdf3",
+  "homepage": "https://github.com/midas-gufei/react-native-agora#readme",
+  "keywords": [],
+  "license": "ISC",
+  "main": "index.js",
+  "maintainers": [
+    {
+      "name": "chn_ruby",
+      "email": "chn_ruby@126.com"
+    }
+  ],
+  "name": "react-native-agoraio",
+  "optionalDependencies": {},
+  "publish_time": 1521707251920,
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/midas-gufei/react-native-agora.git"
+  },
+  "scripts": {
+    "test": "echo \\\"Error: no test specified\\\" && exit 1"
+  },
+  "version": "2.1.8"
+}

@@ -1,0 +1,57 @@
+package io.agora.openlive;
+
+import android.view.SurfaceView;
+
+import com.facebook.react.uimanager.SimpleViewManager;
+import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.annotations.ReactProp;
+
+/**
+ * AgoraViewManage
+ *
+ * @author learnta
+ * @version 1.0
+ * @createDate 2017/12/21
+ * @lastUpdate 2017/12/21
+ */
+public class AgoraViewManage extends SimpleViewManager<AgoraVideoView> {
+
+    public static final String REACT_CLASS = "RCTAgoraView";
+
+    public SurfaceView surfaceView;
+
+    @Override
+    public String getName() {
+        return REACT_CLASS;
+    }
+
+    @Override
+    protected AgoraVideoView createViewInstance(ThemedReactContext reactContext) {
+        return new AgoraVideoView(reactContext);
+    }
+
+    @ReactProp(name = "showLocalVideo")
+    public void setShowLocalVideo(final AgoraVideoView agoraVideoView, boolean showLocalVideo) {
+
+        AgoraManager.getInstance().setupLocalVideo();
+        surfaceView = AgoraManager.getInstance().getLocalSurfaceView();
+        //surfaceView.setVisibility(View.VISIBLE);
+        agoraVideoView.addView(surfaceView);
+//        surfaceView.setZOrderMediaOverlay(true);
+
+    }
+
+    @ReactProp(name = "zOrderMediaOverlay")
+    public void setZOrderMediaOverlay(final AgoraVideoView agoraVideoView, boolean zOrderMediaOverlay) {
+        surfaceView.setZOrderMediaOverlay(zOrderMediaOverlay);
+    }
+
+    @ReactProp(name = "remoteUid")
+    public void setRemoteUid(final AgoraVideoView agoraVideoView, int remoteUid) {
+        AgoraManager.getInstance().setupRemoteVideo(remoteUid);
+        surfaceView = AgoraManager.getInstance().getSurfaceView(remoteUid);
+        //surfaceView.setVisibility(View.VISIBLE);
+        agoraVideoView.addView(surfaceView);
+//        surfaceView.setZOrderMediaOverlay(true);
+    }
+}
