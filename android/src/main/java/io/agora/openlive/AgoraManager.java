@@ -190,7 +190,7 @@ public class AgoraManager {
         boolean swapWidthAndHeight = options.getBoolean("swapWidthAndHeight");
         int channelProfile = options.getInt("channelProfile");
         int role = options.getInt("clientRole");
-
+        boolean enableVideo = options.getBoolean("enableVideo");
         //创建RtcEngine对象，mRtcEventHandler为RtcEngine的回调
         try {
             mRtcEngine = RtcEngine.create(context, appid, mRtcEventHandler);
@@ -199,16 +199,18 @@ public class AgoraManager {
         }
 
         //开启视频功能
-        mRtcEngine.enableVideo();
-        mRtcEngine.setVideoProfile(videoProfile, swapWidthAndHeight); //视频配置，
-        mRtcEngine.enableWebSdkInteroperability(true);  //设置和web通信
-        mRtcEngine.setChannelProfile(channelProfile); //设置模式
-        mRtcEngine.setClientRole(role); //设置角色
+        if(enableVideo) {
+            mRtcEngine.enableVideo();
+            mRtcEngine.setVideoProfile(videoProfile, swapWidthAndHeight); //视频配置，
+            mRtcEngine.enableWebSdkInteroperability(true);  //设置和web通信
+            mRtcEngine.setChannelProfile(channelProfile); //设置模式
+            mRtcEngine.setClientRole(role); //设置角色
 
-        isBroadcaster = (role == AgoraRtcClientRole.Broadcaster.value);
+            isBroadcaster = (role == AgoraRtcClientRole.Broadcaster.value);
 
-        // 打开美颜
-        openBeautityFace();
+            // 打开美颜
+            openBeautityFace();
+        }
     }
 
     /**
@@ -234,6 +236,10 @@ public class AgoraManager {
         return this;
     }
 
+    public AgoraManager joinChannel(String channelKey,String channel, int uid) {
+        mRtcEngine.joinChannel(channelKey, channel, null, uid);
+        return this;
+    }
     public AgoraManager joinChannel(String channel, int uid) {
         mRtcEngine.joinChannel(null, channel, null, uid);
         return this;

@@ -12,8 +12,8 @@ export default {
         this.listener && this.listener.remove();
         Agora.init(options);
     },
-    joinChannel(channelName = '00001', uid = 0) {
-        Agora.joinChannel(channelName, uid);
+    joinChannel(channelKey = '', channelName = '00001', uid = 0) {
+        Agora.joinChannel(channelKey, channelName, uid);
     },
     eventEmitter(fnConf) {
         this.removeEmitter();

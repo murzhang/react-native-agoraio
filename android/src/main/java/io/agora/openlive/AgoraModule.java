@@ -593,24 +593,28 @@ type	变化类型:
     /*
     查询用户频道状态
      */
+    @ReactMethod
     public void channelQueryUserIsIn(String channelName, String account){
         AgoraManager.getInstance().channelQueryUserIsIn(channelName,account);
     }
     /*
             设置频道属性
              */
+    @ReactMethod
     public void channelSetAttr(String channelName,String attrName,String attrValue){
         AgoraManager.getInstance().channelSetAttr(channelName,attrName,attrValue);
     }
     /*
         删除频道属性
          */
+    @ReactMethod
     public void channelDelAttr(String channelName,String attrName){
         AgoraManager.getInstance().channelDelAttr(channelName,attrName);
     }
     /*
         清除频道属性
          */
+    @ReactMethod
     public void channelClearAttr(String channelName){
         AgoraManager.getInstance().channelClearAttr(channelName);
     }
@@ -618,18 +622,21 @@ type	变化类型:
     /*
         设置用户属性
          */
+    @ReactMethod
     public void setAttr(String name,String value){
         AgoraManager.getInstance().setAttr(name,value);
     }
     /*
         获取用户全部属性
          */
+    @ReactMethod
     public void getUserAttr(String account,String attrName){
         AgoraManager.getInstance().getUserAttr(account,attrName);
     }
     /*
         获取用户属性
          */
+    @ReactMethod
     public void getUserAttrAll(String account){
         AgoraManager.getInstance().getUserAttrAll(account);
     }
@@ -782,6 +789,43 @@ type	变化类型:
         }
 
         /**
+         * 网络质量反馈
+         */
+        @Override
+        public void onNetworkQuality(final int uid, final int txQuality, final int rxQuality) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    WritableMap map = Arguments.createMap();
+                    map.putString("type", "onNetworkQuality");
+                    map.putInt("uid", uid);
+                    map.putInt("txQuality", txQuality);
+                    map.putInt("rxQuality", rxQuality);
+                    commonEvent(map);
+                }
+            });
+        }
+
+        /*
+        音频质量
+        * */
+        @Override
+        public void onAudioQuality(final int uid, final int quality, final short delay,final short lost) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    WritableMap map = Arguments.createMap();
+                    map.putString("type", "onAudioQuality");
+                    map.putInt("uid", uid);
+                    map.putInt("quality", quality);
+                    map.putInt("delay", delay);
+                    map.putInt("lost", lost);
+                    commonEvent(map);
+                }
+            });
+        }
+
+        /**
          * 错误信息
          */
         @Override
@@ -899,8 +943,8 @@ type	变化类型:
 
     //进入房间
     @ReactMethod
-    public void joinChannel(String channelName, int uid) {
-        AgoraManager.getInstance().joinChannel(channelName, uid);
+    public void joinChannel(String channelNamekey,String channelName, int uid) {
+        AgoraManager.getInstance().joinChannel(channelNamekey,channelName, uid);
     }
 
     //退出

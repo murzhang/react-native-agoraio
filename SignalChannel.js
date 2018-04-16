@@ -11,11 +11,11 @@ export default {
     init(options = {}) {
         this.listener && this.listener.remove();
         Agora.signal_init(options);
-    },    
-    login(account, token, uid=0, deviceID, retry_time_in_s=30, retry_count=3) {
+    },
+    login(account, token, uid = 0, deviceID, retry_time_in_s = 30, retry_count = 3) {
         Agora.signal_login2(account, token, uid, deviceID, retry_time_in_s, retry_count);
     },
-    logout(){
+    logout() {
         Agora.signal_logout();
     },
     channelJoin(channelName) {
@@ -24,11 +24,14 @@ export default {
     channelLeave(channelName) {
         Agora.signal_channelLeave(channelName);
     },
-    messageChannelSend(channelName, msg, msgID){
+    messageChannelSend(channelName, msg, msgID) {
         Agora.signal_messageChannelSend(channelName, msg, msgID)
     },
-    messageInstantSend(account,uid=0, msg, msgID){
-        Agora.signal_messageInstantSend(account,uid, msg, msgID)
+    messageInstantSend(account, uid = 0, msg, msgID) {
+        Agora.signal_messageInstantSend(account, uid, msg, msgID)
+    },
+    channelSetAttr(channelID, name, value) {
+        Agora.channelSetAttr(channelID, name, value)
     },
     eventEmitter(fnConf) {
         this.removeEmitter();
