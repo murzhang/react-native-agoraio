@@ -22,11 +22,15 @@
 #import "UIUtils.h"
 #import "BundleTools.h"
 
-@interface RCTAgora ()<AgoraRtcEngineDelegate>
+@interface RCTAgora ()<AgoraRtcEngineDelegate,AgoraSignalDelegate>
+
+@property(strong, nonatomic) AgoraAPI *signalEngine;
 
 @property(strong, nonatomic) AgoraRtcEngineKit *rtcEngine;
 
 @property(nonatomic, assign) BOOL isBroadcaster;
+
+@property(nonatomic, assign) NSString *appID;
 
 @property(nonatomic, strong) AgoraYuvEnhancerObjc *agoraEnhancer;
 
@@ -37,7 +41,167 @@
 RCT_EXPORT_MODULE();
 
 @synthesize bridge = _bridge;
-
+    
+    //---------------------- 信令系统 ------------------------------//
+    /**
+     *  初始化信令
+     *
+     *  @param appid
+     */
+    RCT_EXPORT_METHOD(signal_init:(NSDictionary *)options) {
+        
+        NSString *appid = options[@"appid"];
+        self.appID = appid;
+        
+        [AgoraConst share].appid = appid;
+        // 初始化signalEngineKit
+        if([AgoraConst share].signalEngine== nil){
+            self.signalEngine = [AgoraAPI getInstanceWithoutMedia:appid];
+            [AgoraConst share].signalEngine = self.signalEngine;
+            
+            AgoraAPI *signal=self.signalEngine;
+            /*
+             * 登录频道成功回调
+             */
+            [signal setOnLoginSuccess:^(uint32_t uid, int fid) {
+                NSMutableDictionary *params = @{}.mutableCopy;
+                params[@"type"] = @"onLoginSuccess";
+                params[@"uid"] = [NSNumber numberWithInteger:uid];
+                params[@"fid"] = [NSNumber numberWithInteger:fid];
+                [self sendSignalEvent:params];
+            }];
+            /*
+             * 登录频道失败回调
+             */
+            [signal setOnLoginFailed:^(AgoraEcode ecode){
+                NSMutableDictionary *params = @{}.mutableCopy;
+                params[@"type"] = @"onChannelJoined";
+                params[@"ecode"] = [NSNumber numberWithInteger:ecode];
+                [self sendSignalEvent:params];
+            }];
+            
+            /*
+             * 加入频道成功回调
+             */
+            [signal setOnChannelJoined:^(NSString* channelID){
+                NSMutableDictionary *params = @{}.mutableCopy;
+                params[@"type"] = @"onChannelJoined";
+                params[@"channelID"] = channelID;
+                [self sendSignalEvent:params];
+            }];
+            /*
+             * 加入频道失败回调
+             */
+            [signal setOnChannelJoinFailed:^(NSString* channelID ,AgoraEcode ecode){
+                NSMutableDictionary *params = @{}.mutableCopy;
+                params[@"type"] = @"onChannelJoinFailed";
+                params[@"channelID"] = channelID;
+                params[@"ecode"] = [NSNumber numberWithInteger:ecode];
+                [self sendSignalEvent:params];
+            }];
+            
+            /*
+             * 频道出错回调
+             */
+            [signal setOnError:^(NSString *name,  AgoraEcode ecode ,NSString *desc){
+                NSMutableDictionary *params = @{}.mutableCopy;
+                params[@"type"] = @"onError";
+                params[@"name"] = name;
+                params[@"ecode"] = [NSNumber numberWithInteger:ecode];
+                params[@"desc"] = desc;
+                [self sendSignalEvent:params];
+            }];
+            
+            /**
+             *  Event of onMessageSendSuccess
+             */
+            [signal setOnMessageSendSuccess:^(NSString *messageID){
+                NSMutableDictionary *params = @{}.mutableCopy;
+                params[@"type"] = @"onMessageSendSuccess";
+                params[@"messageID"] = messageID;
+                [self sendSignalEvent:params];
+            }];
+            
+            /**
+             *  Event of onMessageSendError
+             */
+            [signal setOnMessageSendError:^(NSString *messageID,AgoraEcode ecode){
+                NSMutableDictionary *params = @{}.mutableCopy;
+                params[@"type"] = @"onMessageSendError";
+                params[@"messageID"] = messageID;
+                params[@"ecode"] = [NSNumber numberWithInteger:ecode];
+                [self sendSignalEvent:params];
+            }];
+            
+            /**
+             *  Event of onMessageInstantReceive
+             */
+            [signal setOnMessageInstantReceive:^(NSString *account,uint32_t uid,NSString *msg){
+                NSMutableDictionary *params = @{}.mutableCopy;
+                params[@"type"] = @"onMessageInstantReceive";
+                params[@"account"] = account;
+                params[@"uid"] = [NSNumber numberWithInteger:uid];
+                params[@"msg"] = msg;
+                [self sendSignalEvent:params];
+            }];
+            /**
+             *  Event of onMessageChannelReceive
+             */
+            [signal setOnMessageChannelReceive:^(NSString *channelID,NSString *account ,uint32_t uid ,NSString *msg){
+                NSMutableDictionary *params = @{}.mutableCopy;
+                params[@"type"] = @"onMessageChannelReceive";
+                params[@"channelID"] = channelID;
+                params[@"account"] = account;
+                params[@"uid"] = [NSNumber numberWithInteger:uid];
+                params[@"msg"] = msg;
+                [self sendSignalEvent:params];
+            }];
+        }
+        
+    }
+    /*
+     登录进入信令通道
+     * appId, account, token, uid, deviceID, retry_time_in_s, retry_count
+     */
+    RCT_EXPORT_METHOD(signal_login2:(NSString *)account token:(NSString *)token uid:(NSString *)uid deviceID:(NSString *)deviceID retry_time_in_s:(int)retry_time_in_s retry_count:(int)retry_count) {
+        [self.signalEngine login2:self.appID account:account token:token uid:0 deviceID:deviceID retry_time_in_s:retry_time_in_s retry_count:retry_count];
+    }
+    /*
+     退出信令通道
+     */
+    RCT_EXPORT_METHOD(signal_logout){
+        [self.signalEngine logout];
+    }
+    
+    /*
+     进入频道
+     */
+    RCT_EXPORT_METHOD(signal_channelJoin:(NSString *)channelName){
+        [self.signalEngine channelJoin:channelName];
+    }
+    
+    /*
+     离开频道
+     */
+    RCT_EXPORT_METHOD(signal_channelLeave:(NSString *)channelName){
+        [self.signalEngine channelLeave:channelName];
+    }
+    
+    /*
+     发送频道消息
+     */
+    RCT_EXPORT_METHOD(signal_messageChannelSend:(NSString *)channelName msg:(NSString *)msg msgID:(NSString *) msgID){
+        [self.signalEngine messageChannelSend:channelName msg:msg msgID:msgID];
+    }
+    /*
+     发送点对点消息
+     */
+    RCT_EXPORT_METHOD(signal_messageInstantSend:(NSString *)channelName uid:(uint32_t)uid msg:(NSString *)msg msgID:(NSString *) msgID){
+        [self.signalEngine messageChatSend:channelName uid:uid msg:msg msgID:msgID];
+    }
+    
+    
+    //---------------------- 视频直播 ------------------------------//
 /**
  *  初始化AgoraKit
  *
@@ -80,10 +244,10 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
 }
 
 //加入房间
-RCT_EXPORT_METHOD(joinChannel:(NSString *)channelName uid:(NSInteger)uid) {
+    RCT_EXPORT_METHOD(joinChannel:(NSString *)meidaToken channelName:(NSString *)channelName uid:(NSInteger)uid) {
     //保存一下uid 在自定义视图使用
     [AgoraConst share].localUid = uid;
-    [self.rtcEngine joinChannelByToken:nil channelId:channelName info:nil uid:uid joinSuccess:NULL];
+    [self.rtcEngine joinChannelByToken:meidaToken channelId:channelName info:nil uid:uid joinSuccess:NULL];
 }
 
 //离开频道
@@ -483,12 +647,18 @@ RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback) {
 
 #pragma mark - native to js event method
 - (NSArray<NSString *> *)supportedEvents {
-    return @[@"agoraEvent"];
+    return @[@"agoraEvent",@"agoraSignalEvent"];
 }
 
 - (void)sendEvent:(NSDictionary *)params {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self sendEventWithName:@"agoraEvent" body:params];
+    });
+}
+
+- (void)sendSignalEvent:(NSDictionary *)params {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self sendEventWithName:@"agoraSignalEvent" body:params];
     });
 }
 

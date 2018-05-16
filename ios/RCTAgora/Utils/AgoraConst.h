@@ -7,6 +7,7 @@
 //
 
 #import <AgoraRtcEngineKit/AgoraRtcEngineKit.h>
+#import <AgoraSigKit/AgoraSigKit.h>
 
 @interface AgoraConst : NSObject
 
@@ -15,6 +16,8 @@
 @property (nonatomic, assign) NSInteger localUid;
 
 @property (strong, nonatomic) AgoraRtcEngineKit *rtcEngine;
+
+@property (strong, nonatomic) AgoraAPI *signalEngine;
 
 + (instancetype)share;
 

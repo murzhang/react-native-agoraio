@@ -6,8 +6,6 @@
 
 #define AGORA_SDK_VERSION "1.2.1.43"
 
-
-
 typedef NS_ENUM(NSUInteger, AgoraEcode){
     AgoraEcode_SUCCESS = 0,
     AgoraEcode_LOGOUT_E_OTHER = 100,

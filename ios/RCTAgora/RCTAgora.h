@@ -11,6 +11,8 @@
 #import <React/RCTEventEmitter.h>
 #import <React/RCTBridgeModule.h>
 #import <AgoraRtcEngineKit/AgoraRtcEngineKit.h>
+#import <AgoraSigKit/AgoraSigKit.h>
+#import <AgoraSigKit/AgoraSignalDelegate.h>
 
 @interface RCTAgora : RCTEventEmitter<RCTBridgeModule>
 
