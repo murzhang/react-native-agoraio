@@ -1,7 +1,7 @@
 {
-  "name": "eact-native-agoraio",
+  "name": "react-native-agoraio",
   "version": "2.2.0",
-  "description": "eact-native-agoraio",
+  "description": "react-native-agoraio",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
