@@ -196,7 +196,7 @@ RCT_EXPORT_MODULE();
     /*
      发送点对点消息
      */
-    RCT_EXPORT_METHOD(signal_messageInstantSend:(NSString *)channelName uid:(uint32_t)uid msg:(NSString *)msg msgID:(NSString *) msgID){
+    RCT_EXPORT_METHOD(signal_messageInstantSend:(NSString *)channelName uid:(NSUInteger)uid msg:(NSString *)msg msgID:(NSString *) msgID){
         [self.signalEngine messageChatSend:channelName uid:uid msg:msg msgID:msgID];
     }
     
