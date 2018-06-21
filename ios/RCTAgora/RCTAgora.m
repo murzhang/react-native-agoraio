@@ -156,6 +156,27 @@ RCT_EXPORT_MODULE();
                 params[@"msg"] = msg;
                 [self sendSignalEvent:params];
             }];
+            
+            /**
+             *  Event of onChannelUserJoined
+             */
+            [signal setOnChannelUserJoined:^(NSString *account, uint32_t uid){
+                NSMutableDictionary *params = @{}.mutableCopy;
+                params[@"type"] = @"onChannelUserJoined";
+                params[@"account"] = account;
+                params[@"uid"] = [NSNumber numberWithInteger:uid];
+                [self sendSignalEvent:params];
+            }];
+            /**
+             *  Event of onChannelUserLeaved
+             */
+            [signal setOnChannelUserLeaved:^(NSString *account, uint32_t uid) {
+                NSMutableDictionary *params = @{}.mutableCopy;
+                params[@"type"] = @"onChannelUserLeaved";
+                params[@"account"] = account;
+                params[@"uid"] = [NSNumber numberWithInteger:uid];
+                [self sendSignalEvent:params];
+            }];
         }
         
     }
@@ -197,7 +218,7 @@ RCT_EXPORT_MODULE();
      发送点对点消息
      */
     RCT_EXPORT_METHOD(signal_messageInstantSend:(NSString *)channelName uid:(NSUInteger)uid msg:(NSString *)msg msgID:(NSString *) msgID){
-        [self.signalEngine messageChatSend:channelName uid:uid msg:msg msgID:msgID];
+        [self.signalEngine messageInstantSend:channelName uid:uid msg:msg msgID:msgID];
     }
     
     
