@@ -592,6 +592,17 @@ RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback) {
 }
 
 /*
+ * 网络质量汇报
+ */
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine networkQuality:(NSUInteger)uid txQuality:(AgoraNetworkQuality)txQuality rxQuality:(AgoraNetworkQuality)rxQuality{
+    NSMutableDictionary *params = @{}.mutableCopy;
+    params[@"type"] = @"onNetworkQuality";
+    params[@"uid"] = [NSNumber numberWithInteger:uid];
+    params[@"txQuality"] = [NSNumber numberWithInteger:txQuality];
+    params[@"rxQuality"] = [NSNumber numberWithInteger:rxQuality];
+    [self sendEvent:params];
+}
+/*
  * 主播离线回调
  * 提示有主播离开了频道（或掉线）。
  * SDK 判断用户离开频道（或掉线）的依据是超时: 在一定时间内（15 秒）没有收到对方的任何数据包，判定为对方掉线。
