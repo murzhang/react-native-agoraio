@@ -156,6 +156,27 @@ RCT_EXPORT_MODULE();
                 params[@"msg"] = msg;
                 [self sendSignalEvent:params];
             }];
+            
+            /**
+             *  Event of onChannelUserJoined
+             */
+            [signal setOnChannelUserJoined:^(NSString *account, uint32_t uid){
+                NSMutableDictionary *params = @{}.mutableCopy;
+                params[@"type"] = @"onChannelUserJoined";
+                params[@"account"] = account;
+                params[@"uid"] = [NSNumber numberWithInteger:uid];
+                [self sendSignalEvent:params];
+            }];
+            /**
+             *  Event of onChannelUserLeaved
+             */
+            [signal setOnChannelUserLeaved:^(NSString *account, uint32_t uid) {
+                NSMutableDictionary *params = @{}.mutableCopy;
+                params[@"type"] = @"onChannelUserLeaved";
+                params[@"account"] = account;
+                params[@"uid"] = [NSNumber numberWithInteger:uid];
+                [self sendSignalEvent:params];
+            }];
         }
         
     }
@@ -196,8 +217,8 @@ RCT_EXPORT_MODULE();
     /*
      发送点对点消息
      */
-    RCT_EXPORT_METHOD(signal_messageInstantSend:(NSString *)channelName uid:(uint32_t)uid msg:(NSString *)msg msgID:(NSString *) msgID){
-        [self.signalEngine messageChatSend:channelName uid:uid msg:msg msgID:msgID];
+    RCT_EXPORT_METHOD(signal_messageInstantSend:(NSString *)channelName uid:(NSUInteger)uid msg:(NSString *)msg msgID:(NSString *) msgID){
+        [self.signalEngine messageInstantSend:channelName uid:uid msg:msg msgID:msgID];
     }
     
     
@@ -570,6 +591,17 @@ RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback) {
     [self sendEvent:params];
 }
 
+/*
+ * 网络质量汇报
+ */
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine networkQuality:(NSUInteger)uid txQuality:(AgoraNetworkQuality)txQuality rxQuality:(AgoraNetworkQuality)rxQuality{
+    NSMutableDictionary *params = @{}.mutableCopy;
+    params[@"type"] = @"onNetworkQuality";
+    params[@"uid"] = [NSNumber numberWithInteger:uid];
+    params[@"txQuality"] = [NSNumber numberWithInteger:txQuality];
+    params[@"rxQuality"] = [NSNumber numberWithInteger:rxQuality];
+    [self sendEvent:params];
+}
 /*
  * 主播离线回调
  * 提示有主播离开了频道（或掉线）。
