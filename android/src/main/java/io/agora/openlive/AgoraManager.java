@@ -205,7 +205,9 @@ public class AgoraManager {
             mRtcEngine.enableWebSdkInteroperability(true);  //设置和web通信
             mRtcEngine.setChannelProfile(channelProfile); //设置模式
             mRtcEngine.setClientRole(role); //设置角色
-
+            //默认禁止推视频、音频流
+            mRtcEngine.muteLocalVideoStream(true);
+            mRtcEngine.muteLocalAudioStream(true);
             isBroadcaster = (role == AgoraRtcClientRole.Broadcaster.value);
 
             // 打开美颜
