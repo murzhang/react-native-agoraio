@@ -210,8 +210,10 @@ public class AgoraManager {
             mRtcEngine.muteLocalAudioStream(true);
             isBroadcaster = (role == AgoraRtcClientRole.Broadcaster.value);
 
-            // 打开美颜
-            openBeautityFace();
+			//关闭大流模式
+            mRtcEngine.enableDualStreamMode(false);
+            // 关闭美颜
+            //openBeautityFace();
         }
     }
 

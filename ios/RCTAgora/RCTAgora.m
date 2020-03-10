@@ -252,16 +252,16 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
     
     //频道模式
     [self.rtcEngine setChannelProfile:channelProfile];
-    //启用双流模式
-    [self.rtcEngine enableDualStreamMode:YES];
+    //停用双流模式
+    [self.rtcEngine enableDualStreamMode:NO];
     [self.rtcEngine enableVideo];
     [self.rtcEngine setVideoProfile:videoProfile swapWidthAndHeight:swapWidthAndHeight];
     [self.rtcEngine setClientRole:role];
     
     //Agora Native SDK 与 Agora Web SDK 间的互通
     [self.rtcEngine enableWebSdkInteroperability:YES];
-    // 打开美颜
-    [self openBeautityFace];
+    // 关闭美颜
+    //[self openBeautityFace];
 }
 
 //加入房间
