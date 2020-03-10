@@ -33,6 +33,9 @@ export default {
     channelSetAttr(channelID, name, value) {
         Agora.channelSetAttr(channelID, name, value)
     },
+    setUserAttr(name, value) {
+        Agora.setAttr(name, value);
+    },
     eventEmitter(fnConf) {
         this.removeEmitter();
         this.listener = agoraEmitter.addListener(
